@@ -6,6 +6,8 @@ import 'package:finance_app/app/shared/constants/api_constants.dart';
 import 'package:finance_app/app/shared/constants/dev_config.dart';
 import 'package:finance_app/app/shared/services/auth_service.dart';
 import 'package:finance_app/app/shared/widgets/dev_login_panel.dart';
+import 'package:finance_app/app/shared/theme/app_theme.dart';
+import 'package:finance_app/app/shared/controllers/theme_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -90,7 +92,9 @@ class _HomePageState extends State<HomePage> {
             return ListTile(
               leading: Icon(
                 isCurrentUser ? Icons.check_circle : Icons.person,
-                color: isCurrentUser ? Colors.green : Colors.grey,
+                color: isCurrentUser
+                    ? AppTheme.incomeColor
+                    : Theme.of(context).disabledColor,
               ),
               title: Text(userInfo?['name'] ?? entry.key),
               subtitle: Text('${entry.key} (${userInfo?['role'] ?? 'user'})'),
@@ -108,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                       messenger.showSnackBar(
                         SnackBar(
                           content: Text('Usuário alterado para: ${entry.key}'),
-                          backgroundColor: Colors.green,
+                          backgroundColor: AppTheme.primaryPurple,
                         ),
                       );
                     },
@@ -144,9 +148,18 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         backgroundColor: _isDevLogin
-            ? Colors.orange.shade100
+            ? AppTheme.primaryPurple.withOpacity(0.1)
             : Theme.of(context).colorScheme.inversePrimary,
         actions: [
+          IconButton(
+            icon: Icon(
+              Theme.of(context).brightness == Brightness.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
+            onPressed: _toggleTheme,
+            tooltip: 'Alternar Tema',
+          ),
           if (_isDevLogin)
             IconButton(
               icon: const Icon(Icons.swap_horiz),
@@ -228,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                                     Text(
                                       'R\$ ${controller.monthlyIncome.toStringAsFixed(2)}',
                                       style: const TextStyle(
-                                        color: Colors.green,
+                                        color: AppTheme.incomeColor,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -256,7 +269,7 @@ class _HomePageState extends State<HomePage> {
                                     Text(
                                       'R\$ ${controller.monthlyExpenses.toStringAsFixed(2)}',
                                       style: const TextStyle(
-                                        color: Colors.red,
+                                        color: AppTheme.expenseColor,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -321,5 +334,10 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  Future<void> _toggleTheme() async {
+    final themeController = Modular.get<ThemeController>();
+    await themeController.toggleTheme();
   }
 }

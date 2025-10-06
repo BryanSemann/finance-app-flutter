@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import '../../shared/models/transaction_category.dart';
+import '../../shared/theme/app_theme.dart';
 import 'transactions_controller.dart';
 
 class CreateTransactionPage extends StatefulWidget {
@@ -145,7 +146,7 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
 
   Widget _buildTypeOption(TransactionType type) {
     final isSelected = _selectedType == type;
-    final color = type == TransactionType.income ? Colors.green : Colors.red;
+    final color = AppTheme.getTransactionColor(type == TransactionType.income);
 
     return GestureDetector(
       onTap: () {
@@ -157,9 +158,9 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? color.withValues(alpha: 0.1) : null,
+          color: isSelected ? color.withOpacity(0.1) : null,
           border: Border.all(
-            color: isSelected ? color : Colors.grey.shade300,
+            color: isSelected ? color : Theme.of(context).dividerColor,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -251,12 +252,12 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                     border: Border.all(
                       color: _valueInputType == ValueInputType.total
                           ? Theme.of(context).primaryColor
-                          : Colors.grey.shade400,
+                          : Theme.of(context).disabledColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(8),
                     color: _valueInputType == ValueInputType.total
-                        ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+                        ? Theme.of(context).primaryColor.withOpacity(0.1)
                         : null,
                   ),
                   child: Row(
@@ -291,12 +292,12 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
                     border: Border.all(
                       color: _valueInputType == ValueInputType.installment
                           ? Theme.of(context).primaryColor
-                          : Colors.grey.shade400,
+                          : Theme.of(context).disabledColor,
                       width: 2,
                     ),
                     borderRadius: BorderRadius.circular(8),
                     color: _valueInputType == ValueInputType.installment
-                        ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+                        ? Theme.of(context).primaryColor.withOpacity(0.1)
                         : null,
                   ),
                   child: Row(
@@ -405,7 +406,7 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: _selectDate,
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.grey.shade300),
+        side: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(4),
       ),
     );
@@ -599,7 +600,7 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Transação criada com sucesso!'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppTheme.incomeColor,
         ),
       );
       Modular.to.pop();
@@ -607,7 +608,7 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(controller.errorMessage ?? 'Erro ao criar transação'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppTheme.expenseColor,
         ),
       );
     }

@@ -8,6 +8,8 @@ import 'package:finance_app/app/shared/services/api_service.dart';
 import 'package:finance_app/app/shared/services/auth_service.dart';
 import 'package:finance_app/app/modules/auth/auth_controller.dart';
 import 'package:finance_app/app/shared/guards/auth_guard.dart';
+import 'package:finance_app/app/shared/controllers/theme_controller.dart';
+import 'package:finance_app/mock_test_page.dart';
 
 class AppModule extends Module {
   @override
@@ -16,6 +18,7 @@ class AppModule extends Module {
     i.addSingleton<ApiService>(ApiService.new);
     i.addSingleton<AuthService>(() => AuthService(i.get<ApiService>()));
     i.addSingleton<AuthController>(() => AuthController(i.get<AuthService>()));
+    i.addSingleton<ThemeController>(ThemeController.new);
   }
 
   @override
@@ -38,5 +41,8 @@ class AppModule extends Module {
 
     // Módulo de Relatórios - Protegido
     r.module('/reports', module: ReportsModule(), guards: [AuthGuard()]);
+
+    // Rota temporária para teste de dados mockados
+    r.child('/test-mock', child: (context) => const MockTestPage());
   }
 }
