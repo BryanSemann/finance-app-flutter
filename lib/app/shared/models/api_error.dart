@@ -92,8 +92,9 @@ class ApiError {
 
   String get displayMessage {
     if (message is String) return message as String;
-    if (message is Map)
+    if (message is Map) {
       return (message as Map)['message']?.toString() ?? 'Erro desconhecido';
+    }
     return message.toString();
   }
 }

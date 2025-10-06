@@ -180,7 +180,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: color.withOpacity(0.1),
+          backgroundColor: color.withValues(alpha: 0.1),
           child: Text(
             category?.icon ?? (isIncome ? '💰' : '💸'),
             style: const TextStyle(fontSize: 20),

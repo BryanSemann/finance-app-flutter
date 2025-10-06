@@ -157,7 +157,7 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.1) : null,
+          color: isSelected ? color.withValues(alpha: 0.1) : null,
           border: Border.all(
             color: isSelected ? color : Colors.grey.shade300,
             width: 2,
@@ -227,37 +227,96 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
   }
 
   Widget _buildValueInputTypeSelector() {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: RadioListTile<ValueInputType>(
-            title: const Text('Valor Total'),
-            value: ValueInputType.total,
-            groupValue: _valueInputType,
-            onChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  _valueInputType = value;
-                  _onAmountChanged(); // Recalculate
-                });
-              }
-            },
-          ),
+        const Text(
+          'Tipo de valor:',
+          style: TextStyle(fontWeight: FontWeight.w500),
         ),
-        Expanded(
-          child: RadioListTile<ValueInputType>(
-            title: const Text('Por Parcela'),
-            value: ValueInputType.installment,
-            groupValue: _valueInputType,
-            onChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  _valueInputType = value;
-                  _onAmountChanged(); // Recalculate
-                });
-              }
-            },
-          ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _valueInputType = ValueInputType.total;
+                    _onAmountChanged(); // Recalculate
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: _valueInputType == ValueInputType.total
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey.shade400,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                    color: _valueInputType == ValueInputType.total
+                        ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+                        : null,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        _valueInputType == ValueInputType.total
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
+                        color: _valueInputType == ValueInputType.total
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text('Valor Total'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _valueInputType = ValueInputType.installment;
+                    _onAmountChanged(); // Recalculate
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: _valueInputType == ValueInputType.installment
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey.shade400,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                    color: _valueInputType == ValueInputType.installment
+                        ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+                        : null,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        _valueInputType == ValueInputType.installment
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
+                        color: _valueInputType == ValueInputType.installment
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text('Por Parcela'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -286,35 +345,52 @@ class _CreateTransactionPageState extends State<CreateTransactionPage> {
   }
 
   Widget _buildCategoryField() {
-    return DropdownButtonFormField<TransactionCategory>(
-      value: _selectedCategory,
-      decoration: const InputDecoration(
-        labelText: 'Categoria',
-        prefixIcon: Icon(Icons.category),
-        border: OutlineInputBorder(),
-      ),
-      items: _availableCategories.map((category) {
-        return DropdownMenuItem(
-          value: category,
-          child: Row(
-            children: [
-              Text(category.icon),
-              const SizedBox(width: 8),
-              Text(category.name),
-            ],
-          ),
-        );
-      }).toList(),
-      onChanged: (category) {
-        setState(() {
-          _selectedCategory = category;
-        });
-      },
+    return FormField<TransactionCategory>(
       validator: (value) {
-        if (value == null) {
+        if (_selectedCategory == null) {
           return 'Selecione uma categoria';
         }
         return null;
+      },
+      builder: (FormFieldState<TransactionCategory> state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InputDecorator(
+              decoration: InputDecoration(
+                labelText: 'Categoria',
+                prefixIcon: const Icon(Icons.category),
+                border: const OutlineInputBorder(),
+                errorText: state.errorText,
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<TransactionCategory>(
+                  isExpanded: true,
+                  hint: const Text('Selecione uma categoria'),
+                  value: _selectedCategory,
+                  items: _availableCategories.map((category) {
+                    return DropdownMenuItem(
+                      value: category,
+                      child: Row(
+                        children: [
+                          Text(category.icon),
+                          const SizedBox(width: 8),
+                          Text(category.name),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (category) {
+                    setState(() {
+                      _selectedCategory = category;
+                    });
+                    state.didChange(category);
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
       },
     );
   }
