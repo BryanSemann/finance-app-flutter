@@ -1,0 +1,33 @@
+name: finance_app
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_modular: ^6.3.4
+  modular_interfaces: ^3.0.0
+  # HTTP Client para APIs
+  dio: ^5.4.0
+  # Gerenciamento de estado reativo
+  flutter_mobx: ^2.2.1+1
+  mobx: ^2.3.3+2
+  # Armazenamento local (cache, tokens)
+  shared_preferences: ^2.2.2
+  # Utilitários
+  equatable: ^2.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  # Code generation para MobX
+  build_runner: ^2.4.7
+  mobx_codegen: ^2.6.1
+
+flutter:
+  uses-material-design: true
