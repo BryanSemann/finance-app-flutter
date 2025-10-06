@@ -28,6 +28,8 @@ dev_dependencies:
   # Code generation para MobX
   build_runner: ^2.4.7
   mobx_codegen: ^2.6.1
+  # Testing
+  mockito: ^5.4.4
 
 flutter:
   uses-material-design: true

@@ -7,8 +7,7 @@ import 'package:finance_app/app/shared/services/api_service.dart';
 class HomeModule extends Module {
   @override
   void binds(Injector i) {
-    // Registrar dependências localmente
-    i.addLazySingleton<ApiService>(() => ApiService());
+    // Usar ApiService do AppModule (Singleton global)
     i.addLazySingleton<TransactionRepository>(
       () => TransactionRepository(i.get<ApiService>()),
     );

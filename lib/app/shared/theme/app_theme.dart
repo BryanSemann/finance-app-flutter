@@ -224,32 +224,32 @@ class AppTheme {
       // Switch, checkbox, radio
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+          if (states.contains(WidgetState.selected)) {
             return primaryPurple;
           }
           return Colors.white;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
-            return primaryPurple.withOpacity(0.5);
+          if (states.contains(WidgetState.selected)) {
+            return primaryPurple.withValues(alpha: 0.5);
           }
-          return Colors.white.withOpacity(0.3);
+          return Colors.white.withValues(alpha: 0.3);
         }),
       ),
 
       checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return primaryPurple;
           }
           return Colors.transparent;
         }),
-        checkColor: MaterialStateProperty.all(Colors.white),
+        checkColor: WidgetStateProperty.all(Colors.white),
       ),
 
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return primaryPurple;
           }
           return Colors.white;
@@ -274,7 +274,7 @@ class AppTheme {
 
   static LinearGradient get cardGradient {
     return LinearGradient(
-      colors: [darkCard, darkCard.withOpacity(0.8)],
+      colors: [darkCard, darkCard.withValues(alpha: 0.8)],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     );
