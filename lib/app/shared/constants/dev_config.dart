@@ -5,6 +5,8 @@ class DevConfig {
   // Configurações específicas do desenvolvimento
   static const bool autoLogin =
       false; // Login automático no modo dev (DESABILITADO)
+  static const bool alwaysShowLogin =
+      true; // Sempre mostrar tela de login em desenvolvimento (para testar)
   static const String defaultDevUser = 'dev@finance.com';
 
   // Configurações de debug

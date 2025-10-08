@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:finance_app/app/modules/auth/auth_controller.dart';
+import 'package:finance_app/features/authentication/authentication.dart'
+    as auth;
+import 'package:finance_app/app/shared/constants/dev_config.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -21,11 +23,21 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(const Duration(seconds: 2));
 
     try {
-      final authController = Modular.get<AuthController>();
-      final isLoggedIn = await authController.checkAuthStatus();
+      final authController = Modular.get<auth.AuthController>();
+      // Verificando status de autenticação
+
+      // Forçar login se DevConfig.alwaysShowLogin estiver ativado
+      if (DevConfig.alwaysShowLogin) {
+        Modular.to.pushReplacementNamed('/auth');
+        // DevConfig.alwaysShowLogin=true, navegando para /auth
+        return;
+      }
+      await authController.checkAuthStatus();
+
+      // Status verificado
 
       if (mounted) {
-        if (isLoggedIn) {
+        if (authController.isLoggedIn) {
           Modular.to.pushReplacementNamed('/home');
         } else {
           Modular.to.pushReplacementNamed('/auth');
